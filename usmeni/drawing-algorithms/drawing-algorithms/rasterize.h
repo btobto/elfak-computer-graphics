@@ -18,5 +18,8 @@ namespace circle
 
 namespace ellipse
 {
-
+	void trigonometric(CDC* pDC, int a, int b, COLORREF clr, POINT c = POINT{ 0 , 0 });
+	void polynomial(CDC* pDC, int a, int b, COLORREF clr, POINT c = POINT{ 0 , 0 });
+	void differential1(CDC* pDC, int a, int b, COLORREF clr, POINT c = POINT{ 0 , 0 });
+	void differential2(CDC* pDC, int a, int b, COLORREF clr, POINT c = POINT{ 0 , 0 });
 }

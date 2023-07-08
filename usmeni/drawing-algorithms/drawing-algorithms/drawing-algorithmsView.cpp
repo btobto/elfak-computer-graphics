@@ -75,8 +75,6 @@ void CdrawingalgorithmsView::scale(CDC* pDC, float sx, float sy, bool isRightMul
 
 void CdrawingalgorithmsView::drawGrid(CDC* pDC, int tileNum, int tileLen, COLORREF clr = RGB(200, 200, 200))
 {
-	POINT currPos = pDC->GetCurrentPosition();
-
 	CPen pen(PS_SOLID, 0, clr);
 	CPen* oldPen = pDC->SelectObject(&pen);
 
@@ -93,27 +91,25 @@ void CdrawingalgorithmsView::drawGrid(CDC* pDC, int tileNum, int tileLen, COLORR
 	}
 
 	pDC->SelectObject(oldPen);
-	pDC->MoveTo(currPos);
 }
 
 void CdrawingalgorithmsView::drawAxes(CDC* pDC, int axisLen = 50)
 {
 	constexpr int lineWidth = 2;
 
-	POINT currPos = pDC->GetCurrentPosition();
+	pDC->MoveTo(0, 0);
 	CPen* oldPen = pDC->GetCurrentPen();
 
 	CPen xPen(PS_SOLID, lineWidth, RGB(255, 0, 0));
 	pDC->SelectObject(&xPen);
-	pDC->LineTo(currPos.x + axisLen, currPos.y);
+	pDC->LineTo(axisLen, 0);
 	
-	pDC->MoveTo(currPos.x, currPos.y);
+	pDC->MoveTo(0, 0);
 
 	CPen yPen(PS_SOLID, lineWidth, RGB(0, 0, 255));
 	pDC->SelectObject(&yPen);
-	pDC->LineTo(currPos.x, currPos.y + axisLen);
+	pDC->LineTo(0, axisLen);
 
-	pDC->MoveTo(currPos);
 	pDC->SelectObject(oldPen);
 }
 
@@ -217,8 +213,63 @@ void CdrawingalgorithmsView::drawEllipses(CDC* pDC)
 	XFORM old;
 	pDC->GetWorldTransform(&old);
 
+	POINT c{ 40, 40 };
+	int a = 30, b = 15;
+	int dx = 2 * a;
+
+	// trig
+
+	drawAxes(pDC);
+	ellipse::trigonometric(pDC, a, b, RGB(255, 0, 0), c);
+	translate(pDC, dx, 0);
+
+	ellipse::trigonometric(pDC, b, a, RGB(255, 0, 0), c);
+	translate(pDC, dx, 0);
+
+	// poly
+
+	ellipse::polynomial(pDC, a, b, RGB(0, 255, 0), c);
+	translate(pDC, dx, 0);
+
+	ellipse::polynomial(pDC, b, a, RGB(0, 255, 0), c);
+	translate(pDC, dx, 0);
+
+	ellipse::polynomial(pDC, a, 5, RGB(0, 255, 0), c);
+	translate(pDC, dx, 0);
+
+	ellipse::polynomial(pDC, 5, a, RGB(0, 255, 0), c);
+	translate(pDC, dx, 0);
+
+	// 1st order differential
+
 	drawAxes(pDC);
 
+	ellipse::differential1(pDC, a, b, RGB(0, 0, 255), c);
+	translate(pDC, dx, 0);
+
+	ellipse::differential1(pDC, b, a, RGB(0, 0, 255), c);
+	translate(pDC, dx, 0);
+
+	ellipse::differential1(pDC, a, 5, RGB(0, 0, 255), c);
+	translate(pDC, dx, 0);
+
+	ellipse::differential1(pDC, 5, a, RGB(0, 0, 255), c);
+	translate(pDC, dx, 0);
+
+	// 2nd order differential
+
+	drawAxes(pDC);
+	ellipse::differential2(pDC, a, b, RGB(0, 0, 255), c);
+	translate(pDC, dx, 0);
+
+	ellipse::differential2(pDC, b, a, RGB(0, 0, 255), c);
+	translate(pDC, dx, 0);
+
+	ellipse::differential2(pDC, a, 5, RGB(0, 0, 255), c);
+	translate(pDC, dx, 0);
+
+	ellipse::differential2(pDC, 5, a, RGB(0, 0, 255), c);
+	translate(pDC, dx, 0);
 
 	pDC->SetWorldTransform(&old);
 }
